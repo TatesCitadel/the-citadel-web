@@ -18,6 +18,9 @@
       background: linear-gradient(145deg, #0d0d0d 0%, #1a1a1a 100%);
       color: #f5f5f5;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     canvas {
@@ -31,17 +34,16 @@
       position: relative;
       z-index: 2;
       max-width: 700px;
-      margin: auto;
-      top: 50%;
-      transform: translateY(-50%);
-      backdrop-filter: blur(8px);
+      width: 90%;
       background: rgba(0, 0, 0, 0.6);
       padding: 2rem;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       text-align: center;
-      animation: fadeInSlide 1.6s ease-out forwards;
+      backdrop-filter: blur(8px);
+      animation: fadeIn 1.6s ease-out forwards;
       opacity: 0;
+      transform: translateY(30px);
       pointer-events: none;
     }
 
@@ -49,14 +51,10 @@
       pointer-events: auto;
     }
 
-    @keyframes fadeInSlide {
-      from {
-        opacity: 0;
-        transform: translateY(-60%);
-      }
+    @keyframes fadeIn {
       to {
         opacity: 1;
-        transform: translateY(-50%);
+        transform: translateY(0);
       }
     }
 
@@ -70,9 +68,8 @@
       font-size: 3rem;
       color: #00ff88;
       margin-bottom: 1rem;
-      letter-spacing: 1.5px; /* slight spacing added */
+      letter-spacing: 1.5px;
     }
-
 
     p {
       font-size: 1.125rem;
@@ -165,12 +162,11 @@
 
   setInterval(drawMatrix, 33);
 
-  // Enable button interaction after animation
+  // Enable content after animation
   window.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('content');
     setTimeout(() => {
-      container.classList.add('ready');
-    }, 1600); // Match animation duration
+      document.getElementById('content').classList.add('ready');
+    }, 1600); // matches fadeIn duration
   });
 </script>
 
