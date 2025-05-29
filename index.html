@@ -6,7 +6,6 @@
   <title>THE CITADEL — TOPG Guild</title>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Reset */
     * {
       margin: 0;
       padding: 0;
@@ -17,6 +16,8 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #0d0d0d 0%, #1a1a1a 100%);
+      color: #f5f5f5;
     }
 
     canvas {
@@ -26,33 +27,32 @@
       z-index: 0;
     }
 
-    body {
-      background: linear-gradient(145deg, #0d0d0d 0%, #1a1a1a 100%);
-      color: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 2rem;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
     .container {
+      position: relative;
       z-index: 2;
       max-width: 700px;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
       backdrop-filter: blur(8px);
       background: rgba(0, 0, 0, 0.5);
       padding: 2rem;
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.1);
-      animation: fadeIn 2s ease;
+      text-align: center;
+      animation: fadeInSlide 2s ease forwards;
+      opacity: 0;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
     }
 
     .logo {
@@ -102,11 +102,16 @@
   <p>
     An elite guild for the few who reject weakness, embrace power, and rise beyond the Matrix. You don’t join — you ascend. Apply, prove yourself, and earn entry into the inner circle.
   </p>
-  <a href="YOUR_DISCORD_INVITE_URL_HERE" class="button">Enter the Citadel</a>
+  <a href="YOUR_DISCORD_INVITE_URL_HERE" class="button" id="ctaButton">Enter the Citadel</a>
 </div>
 
+<!-- Sound elements -->
+<audio id="introSound" src="intro.mp3" preload="auto"></audio>
+<audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
 <script>
-  // Matrix background animation
+  // Matrix animation
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
 
@@ -138,10 +143,25 @@
 
   setInterval(draw, 33);
 
-  // Handle resize
+  // Resize canvas
   window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+  });
+
+  // Sound controls
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('introSound').play().catch(() => { /* ignore autoplay errors */ });
+  });
+
+  const ctaButton = document.getElementById('ctaButton');
+
+  ctaButton.addEventListener('mouseenter', () => {
+    document.getElementById('hoverSound').play();
+  });
+
+  ctaButton.addEventListener('click', () => {
+    document.getElementById('clickSound').play();
   });
 </script>
 
