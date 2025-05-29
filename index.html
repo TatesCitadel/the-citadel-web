@@ -12,12 +12,12 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       height: 100%;
-      overflow: hidden;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(145deg, #0d0d0d 0%, #1a1a1a 100%);
       color: #f5f5f5;
+      overflow: hidden;
     }
 
     canvas {
@@ -35,19 +35,24 @@
       top: 50%;
       transform: translateY(-50%);
       backdrop-filter: blur(8px);
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       padding: 2rem;
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.1);
       text-align: center;
-      animation: fadeInSlide 2s ease forwards;
+      animation: fadeInSlide 1.6s ease-out forwards;
       opacity: 0;
+      pointer-events: none;
+    }
+
+    .container.ready {
+      pointer-events: auto;
     }
 
     @keyframes fadeInSlide {
       from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-60%);
       }
       to {
         opacity: 1;
@@ -65,7 +70,9 @@
       font-size: 3rem;
       color: #00ff88;
       margin-bottom: 1rem;
+      letter-spacing: 1.5px; /* slight spacing added */
     }
+
 
     p {
       font-size: 1.125rem;
@@ -90,45 +97,59 @@
       transform: scale(1.05);
       background: linear-gradient(135deg, #00ffcc, #00e6b0);
     }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .button {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
 
 <canvas id="matrix"></canvas>
 
-<div class="container">
+<div class="container" id="content">
   <img src="YOUR_LOGO_URL_HERE" alt="Citadel Logo" class="logo">
   <h1>THE CITADEL</h1>
   <p>
     An elite guild for the few who reject weakness, embrace power, and rise beyond the Matrix. You don’t join — you ascend. Apply, prove yourself, and earn entry into the inner circle.
   </p>
-  <a href="YOUR_DISCORD_INVITE_URL_HERE" class="button" id="ctaButton">Enter the Citadel</a>
+  <a href="YOUR_DISCORD_INVITE_URL_HERE" class="button">Enter the Citadel</a>
 </div>
 
-<!-- Sound elements -->
-<audio id="introSound" src="intro.mp3" preload="auto"></audio>
-<audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
-<audio id="clickSound" src="click.mp3" preload="auto"></audio>
-
 <script>
-  // Matrix animation
+  // Matrix rain background
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
 
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
   const letters = "アァイィウエオカキクケコサシスセソタチツテトナニヌネノ0123456789".split('');
   const fontSize = 16;
-  const columns = canvas.width / fontSize;
-  const drops = Array.from({ length: columns }).fill(1);
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
 
-  function draw() {
+  function drawMatrix() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.fillStyle = "#00ff88";
-    ctx.font = fontSize + "px monospace";
+    ctx.font = `${fontSize}px monospace`;
 
     for (let i = 0; i < drops.length; i++) {
       const text = letters[Math.floor(Math.random() * letters.length)];
@@ -137,31 +158,19 @@
       if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
+
       drops[i]++;
     }
   }
 
-  setInterval(draw, 33);
+  setInterval(drawMatrix, 33);
 
-  // Resize canvas
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-
-  // Sound controls
+  // Enable button interaction after animation
   window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('introSound').play().catch(() => { /* ignore autoplay errors */ });
-  });
-
-  const ctaButton = document.getElementById('ctaButton');
-
-  ctaButton.addEventListener('mouseenter', () => {
-    document.getElementById('hoverSound').play();
-  });
-
-  ctaButton.addEventListener('click', () => {
-    document.getElementById('clickSound').play();
+    const container = document.getElementById('content');
+    setTimeout(() => {
+      container.classList.add('ready');
+    }, 1600); // Match animation duration
   });
 </script>
 
